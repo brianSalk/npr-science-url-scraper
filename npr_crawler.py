@@ -104,12 +104,6 @@ def crawl_npr_science_archive_at_url(url,all_urls):
 
 def get_url_from_date(date):
     return f'https://www.npr.org/sections/science/archive?date={date}'
-def generate_urls(most_recent_date):
-    urls = []
-    for year in range(1998,most_recent_date+1):
-        date = f'12-31-{year}'
-        urls.append(get_url_from_date(date))
-    return urls
 def rec(url):
     all_urls = set()
     date = crawl_npr_science_archive_at_url(url,all_urls)
