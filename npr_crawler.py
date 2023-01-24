@@ -12,7 +12,7 @@ DATE = ""
 if '-h' in sys.argv or '--help' in sys.argv:
     print('-y:', 'year to scrape')
     print('-l','approximate url limit')
-    
+    print('-d', 'specify date in format: m[m]-d[d]-yyyy')
     sys.exit(1)
 for i,each in enumerate(sys.argv):
     if each == '-y':
