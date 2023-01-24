@@ -1,19 +1,19 @@
-import selenium
-from selenium.webdriver.common.by import By
-from selenium import webdriver
-from selenium.webdriver.common.action_chains import ActionChains
-import time
 import sys
-import re
-driver = webdriver.Firefox()
-YEAR = ""
-LIMIT = float('inf')
-DATE = ""
 if '-h' in sys.argv or '--help' in sys.argv:
     print('-y:', 'year to scrape')
     print('-l','approximate url limit')
     print('-d', 'specify date in format: m[m]-d[d]-yyyy')
     sys.exit(1)
+import selenium
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
+import time
+import re
+driver = webdriver.Firefox()
+YEAR = ""
+LIMIT = float('inf')
+DATE = ""
 for i,each in enumerate(sys.argv):
     if each == '-y':
         DATE= '12-31-' + sys.argv[i+1]
