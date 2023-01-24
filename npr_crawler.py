@@ -9,6 +9,11 @@ driver = webdriver.Firefox()
 YEAR = ""
 LIMIT = float('inf')
 DATE = ""
+if '-h' in sys.argv or '--help' in sys.argv:
+    print('-y:', 'year to scrape')
+    print('-l','approximate url limit')
+    
+    sys.exit(1)
 for i,each in enumerate(sys.argv):
     if each == '-y':
         DATE= '12-31-' + sys.argv[i+1]
