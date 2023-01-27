@@ -22,6 +22,8 @@ for i,each in enumerate(sys.argv):
     if each == '-d':
         DATE = sys.argv[i+1]
 def get_date_converted(date):
+    """takes date as formated on npr article page
+    converts it to format used in url"""
     date_parts = date.split()
     month = date_parts[0] 
     day = date_parts[1][:-1]
@@ -108,6 +110,7 @@ def crawl_npr_science_archive_at_url(url,all_urls):
     return last_date
 
 def get_url_from_date(date):
+    """convert date into url of that date"""
     return f'https://www.npr.org/sections/science/archive?date={date}'
 def rec(url):
     all_urls = set()
