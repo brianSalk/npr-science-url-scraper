@@ -1,9 +1,17 @@
 import sys
-if '-h' in sys.argv or '--help' in sys.argv:
-    print('-y:', 'year to scrape')
-    print('-l','approximate url limit')
-    print('-d', 'specify date in format: m[m]-d[d]-yyyy')
-    sys.exit(1)
+import argparse
+# start argparse
+parser = argparse.ArgumentParser(description='craw npr archives and scrape urls into a pickle file')
+parser.add_argument('-y', '--year', help='enter a year to start scaping from')
+parser.add_argument('-l', '--limit',default=100, help='limit each pickled set t N elements')
+parser.add_argument('-d','--date', help='enter date in format D[D]-M[M]-YYYY')
+parser.add_argument('-t','--topic',required=True, help='what topic do you want to scrape?')
+args = parser.parse_args()
+if args.year:
+    args.date = f'12-31-{args.year}'
+# end argparse
+# make sure that f'pickle_{args.topic}' exists, if not display message and exit
+
 import selenium
 from selenium.webdriver.common.by import By
 from selenium import webdriver
@@ -11,16 +19,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 import re
 driver = webdriver.Firefox()
-YEAR = ""
-LIMIT = float('inf')
-DATE = ""
-for i,each in enumerate(sys.argv):
-    if each == '-y':
-        DATE= '12-31-' + sys.argv[i+1]
-    if each == '-l':
-        LIMIT = int(sys.argv[i+1])
-    if each == '-d':
-        DATE = sys.argv[i+1]
 def get_date_converted(date):
     """takes date as formated on npr article page
     converts it to format used in url"""
@@ -100,7 +98,7 @@ def crawl_npr_science_archive_at_url(url,all_urls):
             all_urls.add(each)
         print(len(all_urls))
         time.sleep(4)
-        if len(all_urls) > LIMIT:
+        if len(all_urls) > args.limit:
             break
         if element == last_element:
             break
@@ -109,16 +107,16 @@ def crawl_npr_science_archive_at_url(url,all_urls):
     print(f'last article: {urls[-1]}')
     return last_date
 
-def get_url_from_date(date):
+def get_url_from_date(date,topic):
     """convert date into url of that date"""
-    return f'https://www.npr.org/sections/science/archive?date={date}'
+    return f'https://www.npr.org/sections/{topic}/archive?date={date}'
 def rec(url):
     all_urls = set()
     date = crawl_npr_science_archive_at_url(url,all_urls)
         
 
     import pickle
-    with open(f'pickle/{date}_urls','wb') as f:
+    with open(f'pickle_{args.topic}/{date}_urls','wb') as f:
         pickle.dump(all_urls,f)
-    rec(get_url_from_date(date))
-rec(get_url_from_date(DATE))
+    rec(get_url_from_date(date,args.topic))
+rec(get_url_from_date(args.date,args.topic))
